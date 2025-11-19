@@ -1,0 +1,28 @@
+# Core de LangChain y componentes de la comunidad
+langchain
+langchain-community
+
+# Integración con los modelos de Google (Gemini)
+langchain-google-genai
+
+# Base de datos vectorial para embeddings
+chromadb
+
+# Librería para leer archivos PDF
+pypdf
+
+# Para manejar variables de entorno (como API keys) desde un archivo .env
+python-dotenv
+
+# Para observalidad y control de las trazas
+langfuse
+
+# Recibir peticiones HTTP y crear endpoints
+fastapi
+uvicorn
+
+# Configuracion de secretos en .env
+python-dotenv
+
+#Manipulacion de PDFs
+PyMuPDF
