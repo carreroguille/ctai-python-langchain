@@ -1,4 +1,4 @@
-"""
+﻿"""
 Script de prueba para validar el sistema RAG de asistente de balonmano.
 Prueba la inicialización, herramientas y conversación interactiva.
 """
@@ -15,18 +15,18 @@ logging.basicConfig(
 
 def main():
     print("\n" + "="*70)
-    print("🤾 ASISTENTE DE REGLAMENTACIÓN DE BALONMANO - MODO PRUEBA")
+    print("ASISTENTE DE REGLAMENTACION DE BALONMANO - MODO PRUEBA")
     print("="*70)
     
-    print("\n📦 Inicializando sistema...")
+    print("\n[SISTEMA] Inicializando sistema...")
     
     try:
         # Crear retriever
-        print("   → Creando Retriever...")
+        print("   -> Creando Retriever...")
         retriever = Retriever()
         
         # Crear agente
-        print("   → Creando AIAgent...")
+        print("   -> Creando AIAgent...")
         agent = AIAgent(
             retriever=retriever,
             model_name="openai/gpt-4o-mini",  # Modelo económico para pruebas
@@ -34,15 +34,15 @@ def main():
             use_memory=True
         )
         
-        print("✅ Sistema iniciado correctamente\n")
+        print("[OK] Sistema iniciado correctamente\n")
         
     except Exception as e:
-        print(f"❌ Error al inicializar el sistema: {e}")
+        print(f"[ERROR] Error al inicializar el sistema: {e}")
         return
     
     # ==================== PRUEBAS AUTOMÁTICAS ====================
     print("\n" + "="*70)
-    print("🧪 EJECUTANDO PRUEBAS AUTOMÁTICAS")
+    print("[TEST] EJECUTANDO PRUEBAS AUTOMÁTICAS")
     print("="*70)
     
     test_queries = [
@@ -55,18 +55,18 @@ def main():
         print(f"\n{'-'*70}")
         print(f"PRUEBA {i}: {name}")
         print(f"{'-'*70}")
-        print(f"👤 Usuario: {query}")
-        print(f"🤖 Asistente: ", end="", flush=True)
+        print(f"[Usuario]: {query}")
+        print(f"[Asistente]: ", end="", flush=True)
         
         try:
             response = agent.process_message(query)
             print(response)
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f"[ERROR]: {e}")
     
     # ==================== MODO INTERACTIVO ====================
     print("\n" + "="*70)
-    print("💬 MODO INTERACTIVO")
+    print("[CHAT] MODO INTERACTIVO")
     print("="*70)
     print("Escribe tus preguntas y el asistente responderá.")
     print("Comandos especiales:")
@@ -77,42 +77,42 @@ def main():
     
     while True:
         try:
-            user_input = input("👤 Tú: ").strip()
+            user_input = input("[Tu]: ").strip()
             
             if not user_input:
                 continue
             
             # Comandos especiales
             if user_input.lower() in ['salir', 'exit', 'quit']:
-                print("\n👋 ¡Hasta luego!")
+                print("\n[SISTEMA] ¡Hasta luego!")
                 break
             
             if user_input.lower() in ['limpiar', 'reset']:
                 agent.reset_memory()
-                print("🧹 Memoria limpiada\n")
+                print("[SISTEMA] Memoria limpiada\n")
                 continue
             
             if user_input.lower() == 'historial':
                 history = agent.get_conversation_history()
                 if history:
-                    print("\n📜 Historial de conversación:")
+                    print("\n[HISTORIAL] Conversación:")
                     for msg in history:
-                        role = "Usuario" if msg.type == "human" else "Asistente"
+                        role = "Usuario" if hasattr(msg, 'type') and msg.type == "human" else "Asistente"
                         print(f"  {role}: {msg.content[:100]}...")
                 else:
-                    print("📭 No hay historial\n")
+                    print("[HISTORIAL] No hay historial\n")
                 continue
             
             # Procesar mensaje normal
-            print("🤖 Asistente: ", end="", flush=True)
+            print("[Asistente]: ", end="", flush=True)
             response = agent.process_message(user_input)
             print(response + "\n")
             
         except KeyboardInterrupt:
-            print("\n\n👋 Sesión interrumpida. ¡Hasta luego!")
+            print("\n\n[SISTEMA] Sesión interrumpida. ¡Hasta luego!")
             break
         except Exception as e:
-            print(f"❌ Error: {e}\n")
+            print(f"[ERROR]: {e}\n")
 
 if __name__ == "__main__":
     main()
