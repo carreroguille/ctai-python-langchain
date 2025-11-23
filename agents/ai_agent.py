@@ -22,7 +22,7 @@ class AIAgent:
     def __init__(
         self,
         retriever: Retriever,
-        model_name: str = "openai/gpt-4o-mini",
+        model_name: str = "qwen/qwen3-32b",
         temperature: float = 0.7,
         use_memory: bool = True
     ):

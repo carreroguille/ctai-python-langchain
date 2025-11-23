@@ -27,12 +27,7 @@ def main():
         
         # Crear agente
         print("   -> Creando AIAgent...")
-        agent = AIAgent(
-            retriever=retriever,
-            model_name="openai/gpt-4o-mini",  # Modelo económico para pruebas
-            temperature=0.5,  # Más determinista para RAG
-            use_memory=True
-        )
+        agent = AIAgent(retriever=retriever)
         
         print("[OK] Sistema iniciado correctamente\n")
         
@@ -47,8 +42,9 @@ def main():
     
     test_queries = [
         ("Saludo", "Hola, ¿qué tal?"),
+        ("Indexar PDF", "Indexa el archivo data/Reglas-de-Juego-Julio-2025(ffbc1e18744a58d72f5f23922c0dde1a).pdf"),
         ("Estadísticas", "¿Cuántos documentos tienes indexados?"),
-        ("Capacidades", "¿Qué puedes hacer?"),
+        ("Consulta reglamento", "¿Cuántos pasos puede dar un jugador con el balón?"),
     ]
     
     for i, (name, query) in enumerate(test_queries, 1):
