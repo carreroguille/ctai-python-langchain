@@ -1,28 +1,23 @@
-# Core de LangChain y componentes de la comunidad
+# Core de LangChain
 langchain
 langchain-community
 
-# Integración con los modelos de Google (Gemini)
-langchain-google-genai
+# Integraciones LLM
+langchain-google-genai  # Para embeddings de Google
+langchain-openai        # Para ChatOpenAI (OpenRouter compatible)
 
-# Base de datos vectorial para embeddings
+# Base de datos vectorial
 chromadb
 
-# Librería para leer archivos PDF
-pypdf
+# Manipulación de PDFs
+PyMuPDF
 
-# Para manejar variables de entorno (como API keys) desde un archivo .env
+# Variables de entorno
 python-dotenv
 
-# Para observalidad y control de las trazas
+# Observabilidad (opcional)
 langfuse
 
-# Recibir peticiones HTTP y crear endpoints
+# API REST (para futuro bot/API)
 fastapi
 uvicorn
-
-# Configuracion de secretos en .env
-python-dotenv
-
-#Manipulacion de PDFs
-PyMuPDF
