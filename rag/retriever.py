@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Retriever:
     """
-    Capa de abstracciÃ³n sobre VectorStore.
+    Capa de abstracción sobre VectorStore.
     Proporciona API sencilla para RAG y compatibilidad con LangChain.
     """
 
@@ -35,7 +35,7 @@ class Retriever:
     # ==================== INGESTA ====================
     def add_pdf(self, pdf_path: str) -> int:
         """
-        AÃ±ade un PDF al Ã­ndice vectorial.
+        AÃ±ade un PDF al índice vectorial.
         
         Args:
             pdf_path: Ruta al archivo PDF
@@ -51,31 +51,31 @@ class Retriever:
             logger.error(f"Error indexando PDF {pdf_path}: {e}")
             raise
 
-    # ==================== BÃšSQUEDA ====================
-    def search(self, query: str, n_results: int = 3) -> List[Document]:
+    # ==================== BÚSQUEDA ====================
+    def search(self, query: str, n_results: int = 2) -> List[Document]:
         """
-        Realiza una bÃºsqueda semÃ¡ntica en el Ã­ndice.
+        Realiza una búsqueda semántica en el índice.
         
         Args:
             query: Consulta del usuario
-            n_results: NÃºmero de resultados a devolver
+            n_results: Número de resultados a devolver
             
         Returns:
-            Lista de documentos mÃ¡s relevantes
+            Lista de documentos más relevantes
         """
         try:
             docs = self.vectorstore.query(query, n_results=n_results)
-            logger.info(f"BÃºsqueda: '{query[:50]}...' â†’ {len(docs)} resultados")
+            logger.info(f"Búsqueda: '{query[:50]}...' {len(docs)} resultados")
             return docs
         except Exception as e:
-            logger.error(f"Error en bÃºsqueda: {e}")
+            logger.error(f"Error en búsqueda: {e}")
             return []
 
     # ==================== CONTEXTO PARA RAG ====================
     def build_context(
         self, 
         query: str, 
-        n_results: int = 3,
+        n_results: int = 2,
         include_metadata: bool = False
     ) -> str:
         """
@@ -83,11 +83,11 @@ class Retriever:
         
         Args:
             query: Consulta del usuario
-            n_results: NÃºmero de chunks a recuperar
-            include_metadata: Si incluir informaciÃ³n de fuente y pÃ¡gina
+            n_results: Número de chunks a recuperar
+            include_metadata: Si incluir información de fuente y página
             
         Returns:
-            Contexto como string Ãºnico, listo para pasar al LLM
+            Contexto como string único, listo para pasar al LLM
         """
         docs = self.search(query, n_results)
         
@@ -102,7 +102,7 @@ class Retriever:
                 source = doc.metadata.get('source', 'Unknown')
                 page = doc.metadata.get('page', 'N/A')
                 context_parts.append(
-                    f"[Fuente {i}: {source}, pÃ¡g. {page}]\n{content}"
+                    f"[Fuente {i}: {source}, pag. {page}]\n{content}"
                 )
             else:
                 context_parts.append(content)
@@ -119,7 +119,7 @@ class Retriever:
         Ãštil para integrarse con chains y agents de LangChain.
         
         Args:
-            search_kwargs: ParÃ¡metros de bÃºsqueda como {"k": 4}
+            search_kwargs: Parámetros de búsqueda como {"k": 4}
             
         Returns:
             BaseRetriever de LangChain
@@ -132,7 +132,7 @@ class Retriever:
     # ==================== GESTIÃ“N DE COLECCIÃ“N ====================
     def delete_source(self, source: str) -> None:
         """
-        Elimina todos los chunks pertenecientes a un PDF especÃ­fico.
+        Elimina todos los chunks pertenecientes a un PDF específico.
         
         Args:
             source: Metadata del "source" almacenada en cada chunk
@@ -146,22 +146,22 @@ class Retriever:
 
     def reset(self) -> None:
         """
-        VacÃ­a completamente la colecciÃ³n.
-        ADVERTENCIA: Esta operaciÃ³n es irreversible.
+        Vacía completamente la colección.
+        ADVERTENCIA: Esta operación es irreversible.
         """
         try:
             self.vectorstore.reset()
-            logger.warning("ColecciÃ³n reseteada completamente")
+            logger.warning("Colección reseteada completamente")
         except Exception as e:
             logger.error(f"Error reseteando colecciÃ³n: {e}")
             raise
 
     def stats(self) -> Dict[str, Any]:
         """
-        Devuelve estadÃ­sticas bÃ¡sicas de la colecciÃ³n.
+        Devuelve estadísticas básicas de la colección.
         
         Returns:
-            Diccionario con informaciÃ³n sobre el estado del Ã­ndice
+            Diccionario con información sobre el estado del índice
         """
         return {
             "collection_name": self.vectorstore.collection_name,
