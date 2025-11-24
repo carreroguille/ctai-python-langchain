@@ -5,8 +5,8 @@ langchain-text-splitters==0.2.4
 langchain-community==0.2.17
 
 # Integraciones LLM
-langchain-openai==0.1.25        # Para OpenRouter
-langchain-google-genai==1.0.10  # Para embeddings de Google
+langchain-openai==0.1.25     
+langchain-google-genai==1.0.10  
 
 # ==================== Base de datos vectorial ====================
 chromadb==0.5.23
@@ -18,7 +18,7 @@ PyMuPDF==1.24.13
 python-dotenv==1.0.1
 
 # ==================== Observabilidad (opcional) ====================
-langfuse==2.55.3
+langfuse
 
 # ==================== API REST (para futuro bot/API) ====================
 fastapi==0.115.6

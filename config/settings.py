@@ -8,11 +8,12 @@ env_path = BASE_DIR / ".env"
 if env_path.exists():
     load_dotenv(env_path)
     
-#REQUIRED
+
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     raise RuntimeError("GOOGLE_API_KEY no encontrado. Añade tu clave en .env")
 
+#REQUIRED
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise RuntimeError("OPENAI_API_KEY no encontrado. Añade tu clave en .env")

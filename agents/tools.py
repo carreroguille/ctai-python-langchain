@@ -25,7 +25,7 @@ class RAGTools:
         self.retriever = retriever
         logger.info("RAGTools inicializado correctamente")
     
-    def search_documents(self, query: str, n_results: int = 3) -> str:
+    def search_documents(self, query: str, n_results: int = 2) -> str:
         """
         Busca informacion relevante en los documentos indexados.
         

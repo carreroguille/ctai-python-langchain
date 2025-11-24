@@ -33,17 +33,40 @@ class VectorStore:
             persist_directory=self.persist_dir
         )
         
+    def document_exists(self, source: str) -> bool:
+        """Verifica si un documento ya ha sido indexado
+        
+        Args:
+            source (str): nombre del archivo fuente
+            
+        Returns:
+            bool: True si ya existe, False en caso contrario
+        """
+        # Buscamos si hay algún documento con ese source
+        # Usamos get con un where filter
+        existing = self.vectorstore.get(
+            where={"source": source},
+            limit=1
+        )
+        
+        return len(existing['ids']) > 0
+
     def ingest_pdf(self, pdf_path: str) -> int:
         """Convierte un PDF a embeddings y los almacena en ChromaDB
 
         Args:
             pdf_path (str): ruta al fichero PDF
-            metadata (Optional[Dict], optional): metada adicional si fuese necesario. Defaults to None.
 
         Returns:
-            int: nÃºmero de chunks almacenados
+            int: número de chunks almacenados
         """
         
+        filename = Path(pdf_path).name
+        
+        # Verificar si ya existe
+        if self.document_exists(filename):
+            raise ValueError(f"El documento '{filename}' ya ha sido indexado previamente.")
+            
         chunks: List[Document] = load_and_split_pdf(
             pdf_path,
             chunk_size=CHUNK_SIZE,
@@ -55,7 +78,7 @@ class VectorStore:
         return len(ids)
     
     def query(self, query_text: str, n_results: int = 2) -> List[Document]:
-        """Busqueda semÃ¡ntica usando texto de consulta
+        """Busqueda semántica usando texto de consulta
 
         Args:
             query_text (str): consulta
@@ -89,13 +112,13 @@ class VectorStore:
             self.vectorstore.delete(ids=ids_to_delete)
             
     def reset(self) -> None:
-        """Elimina completamente la colecciÃ³n
+        """Elimina completamente la colección
         """
         
         try:
             self.vectorstore.delete_collection()
         except Exception as e:
-            logger.warning(f"Error al eliminar la colecciÃ³n: {e}")
+            logger.warning(f"Error al eliminar la colección: {e}")
             
         self.vectorstore = Chroma(
             collection_name= self.collection_name,
@@ -106,10 +129,10 @@ class VectorStore:
         logger.info("VectorStore reseteado correctamente")
         
     def get_collection_count(self) -> int:
-        """Devuelve el nÃºmero de documentos en la colecciÃ³n
+        """Devuelve el número de documentos en la colección
 
         Returns:
-            int: nÃºmero de docs en la colecciÃ³n
+            int: número de docs en la colección
         """
         
         return self.vectorstore._collection.count()

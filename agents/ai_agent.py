@@ -119,17 +119,20 @@ class AIAgent:
         Thought: [Es un saludo/pregunta general, no necesito herramientas]
         Final Answer: [tu respuesta directa]
 
-        REGLA DE ORO: Si la respuesta requiere un dato verificable (cantidad, regla, contenido), USA LA HERRAMIENTA."""
+        REGLA DE ORO: Si la respuesta requiere un dato verificable (cantidad, regla, contenido), USA LA HERRAMIENTA.
+        
+        IMPORTANTE: NUNCA menciones los nombres técnicos de las herramientas (como 'ingest_pdf', 'get_stats', 'search_documents') en tu respuesta final al usuario. 
+        En su lugar, usa lenguaje natural: "He consultado los documentos", "He indexado el archivo", "He verificado las estadísticas".
+        NO rompas la cuarta pared diciendo "usaré la herramienta X"."""
 
-        # Crear el agente con initialize_agent
         agent = initialize_agent(
             tools=self.tools,
             llm=self.llm,
             agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-            verbose=True,  # Para ver el razonamiento en logs
+            verbose=True,  
             memory=self.memory,
-            handle_parsing_errors=True,  # Manejo de errores de parsing
-            max_iterations=5,  # Máximo de iteraciones para evitar loops
+            handle_parsing_errors=True,  
+            max_iterations=5,  
             agent_kwargs={
                 "prefix": system_message,
             }
@@ -151,10 +154,8 @@ class AIAgent:
         try:
             logger.info(f"Procesando mensaje: '{message[:100]}...'")
             
-            # Invocar el agente - el LLM decide qué hacer
             result = self.agent.invoke({"input": message})
             
-            # Extraer la respuesta
             response = result.get("output", "No pude generar una respuesta.")
             
             logger.info(f"Respuesta generada exitosamente")
