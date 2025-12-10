@@ -1,0 +1,87 @@
+﻿import fitz
+from typing import List
+from pathlib import Path
+
+from langchain_core.documents import Document
+
+
+def extract_text_from_pdf(path: str) -> str:
+    """
+    Extrae todo el texto de un PDF empleando PyMuPDF
+    
+    Args:
+        path (str): Ruta al PDF
+
+    Returns:
+        str: Texto completo extraido
+    """
+    
+    doc = fitz.open(path)
+    text = ""
+    
+    for page in doc:
+        text += page.get_text()
+        
+    return text
+
+
+def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> List[str]:
+    """
+    Divide el texto en chunks superpuestos (mejor manejo para el RAG)
+
+    Args:
+        text (str): Texto largo con contenido del PDF
+        chunk_size (int, optional): Tamaño máximo de cada chunk. Defaults to 1000.
+        overlap (int, optional): Superposición entre chunks. Defaults to 200.
+
+    Returns:
+        List[str]: Lista de chunks de texto
+    """
+    
+    chunks = []
+    start = 0
+    text_length = len(text)
+    
+    while start < text_length:
+        end = start + chunk_size
+        chunk = text[start:end]
+        chunks.append(chunk)
+        start = end - overlap
+        
+    return chunks
+
+
+def load_and_split_pdf(pdf_path: str, chunk_size: int = 1000, chunk_overlap: int = 200) -> List[Document]:
+    """
+    Función principal que carga un PDF, lo divide en chunks y devuelve documentos de LangChain.
+    
+    Args:
+        pdf_path (str): Ruta al archivo PDF
+        chunk_size (int): Tamaño de cada chunk
+        chunk_overlap (int): Superposición entre chunks
+        
+    Returns:
+        List[Document]: Lista de documentos de LangChain listos para indexar
+    """
+    # Extraer texto del PDF
+    text = extract_text_from_pdf(pdf_path)
+    
+    # Dividir en chunks
+    chunks = chunk_text(text, chunk_size=chunk_size, overlap=chunk_overlap)
+    
+    # Crear documentos de LangChain con metadata
+    documents = []
+    filename = Path(pdf_path).name
+    
+    for i, chunk in enumerate(chunks):
+        doc = Document(
+            page_content=chunk,
+            metadata={
+                "source": filename,
+                "chunk": i,
+                "total_chunks": len(chunks)
+            }
+        )
+        documents.append(doc)
+    
+    return documents

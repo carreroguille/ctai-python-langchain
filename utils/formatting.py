@@ -1,0 +1,21 @@
+﻿from typing import List
+
+def format_answer(text: str, sources: List[str] = None) -> str:
+    """
+    Formatea la respuesta del sistema añadiendo fuentes si existen
+
+    Args:
+        text (str): Respuesta del agente
+        sources (List[str], optional): Lista de IDs o URLs de las fuentes. Defaults to None.
+
+    Returns:
+        str: Texto formateado
+    """
+    formatted = text.strip()
+    
+    if sources:
+        formatted += "\n\n--- \n**Fuentes:**n"
+        for src in sources:
+            formatted += f"- {src}\n"
+            
+    return formatted

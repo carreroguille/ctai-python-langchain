@@ -1,0 +1,19 @@
+# Python internals
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+
+# Temporary files (from code analysis)
+temp_pdfs/
+
+# OS specific
+.DS_Store
+Thumbs.db
