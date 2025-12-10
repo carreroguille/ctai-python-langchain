@@ -1,6 +1,12 @@
 # 🤾 Bot de Telegram RAG - Asistente de Reglamentación de Balonmano
 
-Sistema inteligente de bot de Telegram con RAG (Retrieval-Augmented Generation) para responder consultas sobre reglamentación de balonmano, gestos arbitrales y ayuda en la generación de informes técnicos.
+Asistente para que arbitros (en este caso concreto de balonmano) puedan realizar consultas sobre noramtivas y reglamentación, obtener ayuda en la redacción de informes técnicos y disponer de gestoformas de manera visual a traves de consultas a una API externa. La integración de telegram permite disponer del asistente en todo momento, incluso durante los descansos en un partido real, momentos en los que no se puede acceder a un ordenador o perder tiempo consultando todas las pagians de la normativa.
+
+El procesamiento del lenguaje natural es clave aqui:
+
+- Permite "entender que quiere hacer" el usuario. Sabe distinguir su intención y emplear la herramienta adecuada para ello, algo que programaticamente sería muy complejo en una sola interfaz multimodal.
+- El LLM permite cruzar información de varios documentos para responder a preguntas mas complejas y sintetizarlas en una respuesta.
+- La generación de informes a veces es necesaria realizarla in-situ, emplear NLP es fundamental para poder transformar datos sueltos o redacciones en lenguaje cotidiano a informes que puedan redactarse en documentos oficiales.
 
 ## 🎯 Características
 
@@ -253,7 +259,7 @@ ctai-python-langchain/
 6. **LLM genera respuesta** → OpenRouter (Qwen 3)
 7. **Bot responde** → Usuario en Telegram
 
-![Flujo de Procesamiento](./assets/flujo_procesamiento.png)
+[Flujo de Procesamiento](./assets/flujo_procesamiento.png)
 
 ### Componentes Clave
 
