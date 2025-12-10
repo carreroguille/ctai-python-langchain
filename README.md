@@ -253,6 +253,8 @@ ctai-python-langchain/
 6. **LLM genera respuesta** → OpenRouter (Qwen 3)
 7. **Bot responde** → Usuario en Telegram
 
+![Flujo de Procesamiento](./assets/flujo_procesamiento.png)
+
 ### Componentes Clave
 
 - **AIAgent**: Orquesta el flujo usando patrón ReAct (Reasoning + Acting)
