@@ -141,7 +141,7 @@ class TelegramBot:
                 user_id=str(user_id),
                 session_id=str(update.message.chat_id)
             )
-            await update.message.reply_text(response)
+            await update.message.reply_text(response, parse_mode="Markdown")
             
             logger.info(f"Respuesta enviada a usuario {user_id}")
             

@@ -17,7 +17,6 @@ class VectorStore:
         """
         Inicializa ChromaDB persistente.
         """
-        
         self.persist_dir = CHROMA_PERSIST_DIR
         self.collection_name = "pdf_cta_collection"
         Path(self.persist_dir).mkdir(parents=True, exist_ok=True)
