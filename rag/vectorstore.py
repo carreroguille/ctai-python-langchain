@@ -13,13 +13,13 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 class VectorStore:
-    def __init__(self, persist_dir: Optional[str] = None, collection_name: str = "pdf_collection"):
+    def __init__(self):
         """
         Inicializa ChromaDB persistente.
         """
         
-        self.persist_dir = persist_dir or CHROMA_PERSIST_DIR
-        self.collection_name = collection_name
+        self.persist_dir = CHROMA_PERSIST_DIR
+        self.collection_name = "pdf_cta_collection"
         Path(self.persist_dir).mkdir(parents=True, exist_ok=True)
         
         self.embeddings_model = GoogleGenerativeAIEmbeddings(
@@ -134,5 +134,21 @@ class VectorStore:
         Returns:
             int: número de docs en la colección
         """
-        
         return self.vectorstore._collection.count()
+    
+    def get_indexed_sources(self) -> List[str]:
+        """Devuelve la lista de nombres de documentos indexados (fuentes únicas)
+
+        Returns:
+            List[str]: lista de nombres de archivos indexados
+        """
+        try:
+            all_docs = self.vectorstore.get()
+            sources = set()
+            for meta in all_docs.get('metadatas', []):
+                if meta and 'source' in meta:
+                    sources.add(meta['source'])
+            return sorted(list(sources))
+        except Exception as e:
+            logger.error(f"Error obteniendo fuentes indexadas: {e}")
+            return []

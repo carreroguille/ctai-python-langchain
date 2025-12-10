@@ -14,11 +14,7 @@ class Retriever:
     Proporciona API sencilla para RAG y compatibilidad con LangChain.
     """
 
-    def __init__(
-        self,
-        persist_dir: Optional[str] = None,
-        collection_name: str = "pdf_collection"
-    ):
+    def __init__(self):
         """
         Inicializa el Retriever.
         
@@ -26,22 +22,19 @@ class Retriever:
             persist_dir: Directorio donde persisten los embeddings
             collection_name: Nombre de la colecciÃ³n de Chroma
         """
-        self.vectorstore = VectorStore(
-            persist_dir=persist_dir,
-            collection_name=collection_name
-        )
-        logger.info(f"Retriever inicializado: {collection_name}")
+        self.vectorstore = VectorStore()
+        logger.info("Retriever inicializado")
 
     # ==================== INGESTA ====================
     def add_pdf(self, pdf_path: str) -> int:
         """
-        AÃ±ade un PDF al índice vectorial.
+        Añade un PDF al índice vectorial.
         
         Args:
             pdf_path: Ruta al archivo PDF
             
         Returns:
-            NÃºmero de chunks indexados
+            Número de chunks indexados
         """
         try:
             count = self.vectorstore.ingest_pdf(pdf_path)
@@ -52,7 +45,7 @@ class Retriever:
             raise
 
     # ==================== BÚSQUEDA ====================
-    def search(self, query: str, n_results: int = 2) -> List[Document]:
+    def search(self, query: str, n_results: int) -> List[Document]:
         """
         Realiza una búsqueda semántica en el índice.
         
@@ -102,60 +95,14 @@ class Retriever:
                 source = doc.metadata.get('source', 'Unknown')
                 page = doc.metadata.get('page', 'N/A')
                 context_parts.append(
-                    f"[Fuente {i}: {source}, pag. {page}]\n{content}"
+                    f"[Fuente {i}: {source}, pagina. {page}]\n{content}"
                 )
             else:
                 context_parts.append(content)
         
         return "\n\n---\n\n".join(context_parts)
 
-    # ==================== COMPATIBILIDAD LANGCHAIN ====================
-    def as_langchain_retriever(
-        self, 
-        search_kwargs: Optional[Dict[str, Any]] = None
-    ) -> BaseRetriever:
-        """
-        Devuelve un retriever compatible con la interfaz estÃ¡ndar de LangChain.
-        Ãštil para integrarse con chains y agents de LangChain.
-        
-        Args:
-            search_kwargs: Parámetros de búsqueda como {"k": 4}
-            
-        Returns:
-            BaseRetriever de LangChain
-        """
-        search_kwargs = search_kwargs or {"k": 3}
-        return self.vectorstore.vectorstore.as_retriever(
-            search_kwargs=search_kwargs
-        )
-
-    # ==================== GESTIÃ“N DE COLECCIÃ“N ====================
-    def delete_source(self, source: str) -> None:
-        """
-        Elimina todos los chunks pertenecientes a un PDF específico.
-        
-        Args:
-            source: Metadata del "source" almacenada en cada chunk
-        """
-        try:
-            self.vectorstore.delete_by_source(source)
-            logger.info(f"Documentos eliminados: {source}")
-        except Exception as e:
-            logger.error(f"Error eliminando {source}: {e}")
-            raise
-
-    def reset(self) -> None:
-        """
-        Vacía completamente la colección.
-        ADVERTENCIA: Esta operación es irreversible.
-        """
-        try:
-            self.vectorstore.reset()
-            logger.warning("Colección reseteada completamente")
-        except Exception as e:
-            logger.error(f"Error reseteando colecciÃ³n: {e}")
-            raise
-
+    # ==================== GESTION DE COLECCION ====================
     def stats(self) -> Dict[str, Any]:
         """
         Devuelve estadísticas básicas de la colección.
@@ -165,6 +112,7 @@ class Retriever:
         """
         return {
             "collection_name": self.vectorstore.collection_name,
-            "persist_dir": self.vectorstore.persist_dir,
-            "total_documents": self.vectorstore.get_collection_count()
+            "total_documents": self.vectorstore.get_collection_count(),
+            "indexed_documents": self.vectorstore.get_indexed_sources()
         }
+

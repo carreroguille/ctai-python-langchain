@@ -136,8 +136,12 @@ class TelegramBot:
         try:
             await update.message.chat.send_action(action="typing")
             
-            response = self.agent.process_message(user_message)
-            await update.message.reply_text(response, parse_mode="Markdown")
+            response = self.agent.process_message(
+                user_message,
+                user_id=str(user_id),
+                session_id=str(update.message.chat_id)
+            )
+            await update.message.reply_text(response)
             
             logger.info(f"Respuesta enviada a usuario {user_id}")
             
