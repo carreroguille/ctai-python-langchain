@@ -243,6 +243,8 @@ ctai-python-langchain/
 3. Envía `/start`
 4. Prueba los comandos y envía preguntas
 
+### [Video de ejecución del bot](https://drive.google.com/file/d/1dPvsYwEjHmfef87JtXCpuEkF4c8_nJ8W/view?usp=drive_link)
+
 ## 🏗️ Arquitectura
 
 ### Flujo de Procesamiento
@@ -259,7 +261,7 @@ ctai-python-langchain/
 6. **LLM genera respuesta** → OpenRouter (Qwen 3)
 7. **Bot responde** → Usuario en Telegram
 
-[Flujo de Procesamiento](./assets/flujo_procesamiento.png)
+![Flujo Conversacional](./assets/flujo_conversacional.png)
 
 ### Componentes Clave
 
